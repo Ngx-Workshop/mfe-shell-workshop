@@ -6,7 +6,7 @@ import { RouterOutlet } from '@angular/router';
   imports: [RouterOutlet],
   template: `
     <h1>Welcome to {{title}}!</h1>
-
+    <a routerLink="/seed-mfe">Go to Seed MFE</a>
     <router-outlet />
   `,
   styles: [],
