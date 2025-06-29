@@ -4,7 +4,7 @@ import { loadRemoteModule } from '@angular-architects/module-federation';
 export const routes: Routes = [
   {
     path: 'seed-mfe',
-    loadChildren: () =>
+    loadComponent: () =>
       loadRemoteModule({
         type: 'module',
         remoteEntry: '/remotes/ngx-seed-mfe/remoteEntry.js',
