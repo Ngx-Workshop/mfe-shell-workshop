@@ -18,7 +18,7 @@ export class MfeRegistryService {
   remotes = new BehaviorSubject<MfeRemote[]>([]);
   remotes$ = this.remotes.asObservable();
 
-  load() {
+  loadMfeRemotes() {
     return this.http.get<MfeRemote[]>('/api/mfe-remotes').pipe(
       tap(remotes => this.remotes.next(remotes))
     );
