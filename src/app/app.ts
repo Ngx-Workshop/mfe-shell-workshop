@@ -6,11 +6,17 @@ import {
   MfeRegistryService,
   StructuralOverrideMode,
 } from './services/mfe-registry.service';
-import { HeaderComponent } from './structural-components';
+import { FooterComponent, HeaderComponent } from './structural-components';
 
 @Component({
   selector: 'ngx-root',
-  imports: [RouterOutlet, MatButtonModule, AsyncPipe, HeaderComponent],
+  imports: [
+    RouterOutlet,
+    MatButtonModule,
+    AsyncPipe,
+    HeaderComponent,
+    FooterComponent,
+  ],
   template: `
     <div class="layout">
       <header>
@@ -25,10 +31,10 @@ import { HeaderComponent } from './structural-components';
       </main>
 
       <footer>
-        <!-- <ngx-footer
+        <ngx-footer
           [mfeRemoteUrl]="(footerMfeRemoteUrl$ | async) ?? ''"
           [mode]="(modes$ | async)?.footer ?? FULL"
-        ></ngx-footer> -->
+        ></ngx-footer>
       </footer>
     </div>
   `,
