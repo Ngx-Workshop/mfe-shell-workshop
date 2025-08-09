@@ -1,9 +1,9 @@
 import { loadRemoteModule } from '@angular-architects/module-federation';
 import {
   Component,
+  inject,
   input,
   OnInit,
-  ViewChild,
   ViewContainerRef,
 } from '@angular/core';
 
@@ -12,9 +12,7 @@ import {
   template: ``,
 })
 export class HeaderComponent implements OnInit {
-  @ViewChild('mfeHost', { read: ViewContainerRef, static: true })
-  protected mfeHost!: ViewContainerRef;
-
+  viewContainer = inject(ViewContainerRef);
   mfeRemoteUrl = input.required<string>();
 
   async ngOnInit() {
@@ -24,7 +22,7 @@ export class HeaderComponent implements OnInit {
         remoteEntry: this.mfeRemoteUrl(),
         exposedModule: './Component',
       });
-      this.mfeHost.createComponent(remoteComponent.default);
+      this.viewContainer.createComponent(remoteComponent.default);
     } catch (error) {
       console.error('[MFE LOAD ERROR]', error);
     }
