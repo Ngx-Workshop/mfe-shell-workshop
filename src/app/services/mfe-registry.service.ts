@@ -19,7 +19,7 @@ export class MfeRegistryService {
   remotes$ = this.remotes.asObservable();
 
   load() {
-    return this.http.get<MfeRemote[]>('https://mfe-orchestrator.ngx-workshop.io/api/mfe-remotes').pipe(
+    return this.http.get<MfeRemote[]>('/api/mfe-remotes').pipe(
       tap(remotes => this.remotes.next(remotes))
     );
   }
