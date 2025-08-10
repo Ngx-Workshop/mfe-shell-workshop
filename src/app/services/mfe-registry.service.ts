@@ -106,8 +106,8 @@ export class MfeRegistryService {
       );
       if (localStorageValue) {
         try {
-          const parsedValue = JSON.parse(localStorageValue);
-          return { ...remote, remoteEntryUrl: parsedValue.remoteEntryUrl };
+          const parsedValue = localStorageValue;
+          return { ...remote, remoteEntryUrl: parsedValue };
         } catch (error) {
           console.error(
             `Error parsing local storage value for ${localStorageKey}`,
