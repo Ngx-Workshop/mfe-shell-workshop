@@ -2,7 +2,7 @@ import { loadRemoteModule } from '@angular-architects/module-federation';
 import { HttpClient } from '@angular/common/http';
 import { inject, Injectable } from '@angular/core';
 import { Router, Routes } from '@angular/router';
-import { BehaviorSubject, map, shareReplay, tap } from 'rxjs';
+import { BehaviorSubject, map, tap } from 'rxjs';
 
 export enum MfeRemoteType {
   STRUCTURAL = 'structural',
@@ -58,10 +58,7 @@ export class MfeRegistryService {
   http = inject(HttpClient);
 
   remotes = new BehaviorSubject<IMfeRemote[]>([]);
-  remotes$ = this.remotes.asObservable().pipe(
-    map((remotes) => this.getUpdatedRemotesFromLocalStorage(remotes)),
-    shareReplay(1)
-  );
+  remotes$ = this.remotes.asObservable();
 
   // Structural MFE remote URLs
   headerRemoteUrl$ = this.getRemoteUrlBySubType(StructuralSubType.HEADER);
@@ -128,7 +125,7 @@ export class MfeRegistryService {
    * Path = slug(name), remoteEntry = remoteEntryUrl
    */
   buildUserJourneyRoutes(): Routes {
-    return this.remotes.value
+    return this.getUpdatedRemotesFromLocalStorage(this.remotes.value)
       .filter((r) => r.type === MfeRemoteType.USER_JOURNEY)
       .map((r) => ({
         path: toSlug(r.name),
