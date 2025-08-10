@@ -1,6 +1,6 @@
 import { HttpClient } from '@angular/common/http';
 import { inject, Injectable } from '@angular/core';
-import { BehaviorSubject, map, tap } from 'rxjs';
+import { BehaviorSubject, map, shareReplay, tap } from 'rxjs';
 
 export enum MfeRemoteType {
   STRUCTURAL = 'structural',
@@ -52,9 +52,10 @@ export class MfeRegistryService {
   http = inject(HttpClient);
 
   remotes = new BehaviorSubject<IMfeRemote[]>([]);
-  remotes$ = this.remotes
-    .asObservable()
-    .pipe(map((remotes) => this.getUpdatedRemotesFromLocalStorage(remotes)));
+  remotes$ = this.remotes.asObservable().pipe(
+    map((remotes) => this.getUpdatedRemotesFromLocalStorage(remotes)),
+    shareReplay(1)
+  );
 
   // Structural MFE remote URLs
   headerRemoteUrl$ = this.getRemoteUrlBySubType(StructuralSubType.HEADER);
