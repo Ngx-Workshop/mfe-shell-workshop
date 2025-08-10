@@ -10,7 +10,7 @@ import {
 import {
   StructuralNavOverrideMode,
   StructuralOverrideMode,
-} from './services/mfe-registry.service';
+} from '../services/mfe-registry.service';
 
 @Component({
   selector: 'ngx-structural-mfe',
