@@ -2,28 +2,29 @@ import { AsyncPipe } from '@angular/common';
 import { Component, inject } from '@angular/core';
 import { MatButtonModule } from '@angular/material/button';
 import { RouterOutlet } from '@angular/router';
+import { combineLatest } from 'rxjs';
 import {
   MfeRegistryService,
+  StructuralNavOverrideMode,
   StructuralOverrideMode,
 } from './services/mfe-registry.service';
-import { FooterComponent, HeaderComponent } from './structural-components';
+import { StructuralMfeComponent } from './structural-mfe';
 
 @Component({
   selector: 'ngx-root',
-  imports: [
-    RouterOutlet,
-    MatButtonModule,
-    AsyncPipe,
-    HeaderComponent,
-    FooterComponent,
-  ],
+  imports: [RouterOutlet, MatButtonModule, AsyncPipe, StructuralMfeComponent],
   template: `
+    @if(viewModel$ | async; as vm) {
+    <ngx-structural-mfe
+      [mfeRemoteUrl]="vm.navigationMfeRemoteUrl ?? ''"
+      [mode]="vm.modes.nav ?? VERBOSE"
+    ></ngx-structural-mfe>
     <div class="layout">
       <header>
-        <ngx-header
-          [mfeRemoteUrl]="(headerMfeRemoteUrl$ | async) ?? ''"
-          [mode]="(modes$ | async)?.header ?? FULL"
-        ></ngx-header>
+        <ngx-structural-mfe
+          [mfeRemoteUrl]="vm.headerMfeRemoteUrl ?? ''"
+          [mode]="vm.modes.header ?? FULL"
+        ></ngx-structural-mfe>
       </header>
 
       <main>
@@ -31,12 +32,13 @@ import { FooterComponent, HeaderComponent } from './structural-components';
       </main>
 
       <footer>
-        <ngx-footer
-          [mfeRemoteUrl]="(footerMfeRemoteUrl$ | async) ?? ''"
-          [mode]="(modes$ | async)?.footer ?? FULL"
-        ></ngx-footer>
+        <ngx-structural-mfe
+          [mfeRemoteUrl]="vm.footerMfeRemoteUrl ?? ''"
+          [mode]="vm.modes.footer ?? FULL"
+        ></ngx-structural-mfe>
       </footer>
     </div>
+    }
   `,
   styles: [
     `
@@ -63,10 +65,14 @@ import { FooterComponent, HeaderComponent } from './structural-components';
 })
 export class App {
   protected readonly FULL = StructuralOverrideMode.FULL;
+  protected readonly VERBOSE = StructuralNavOverrideMode.VERBOSE;
   private registry = inject(MfeRegistryService);
 
   // URL for the header structural MFE and the current structural modes
-  protected headerMfeRemoteUrl$ = this.registry.headerRemoteUrl$;
-  protected footerMfeRemoteUrl$ = this.registry.footerRemoteUrl$;
-  protected modes$ = this.registry.structuralModes$;
+  protected viewModel$ = combineLatest({
+    headerMfeRemoteUrl: this.registry.headerRemoteUrl$,
+    footerMfeRemoteUrl: this.registry.footerRemoteUrl$,
+    navigationMfeRemoteUrl: this.registry.navigationRemoteUrl$,
+    modes: this.registry.structuralModes$,
+  });
 }

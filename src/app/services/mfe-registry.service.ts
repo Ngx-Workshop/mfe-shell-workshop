@@ -85,6 +85,15 @@ export class MfeRegistryService {
     )
   );
 
+  navigationRemoteUrl$ = this.remotes$.pipe(
+    map(
+      (remotes) =>
+        remotes.find(
+          (remote) => remote.structuralSubType === StructuralSubType.NAV
+        )?.remoteEntryUrl
+    )
+  );
+
   // Called durring provideAppInitializer
   loadMfeRemotes() {
     return this.http
