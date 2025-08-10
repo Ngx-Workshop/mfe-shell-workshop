@@ -2,7 +2,7 @@ import { AsyncPipe } from '@angular/common';
 import { Component, inject } from '@angular/core';
 import { MatButtonModule } from '@angular/material/button';
 import { RouterOutlet } from '@angular/router';
-import { combineLatest } from 'rxjs';
+import { combineLatest, tap } from 'rxjs';
 import {
   MfeRegistryService,
   StructuralNavOverrideMode,
@@ -88,9 +88,10 @@ export class App {
 
   // URL for the header structural MFE and the current structural modes
   protected viewModel$ = combineLatest({
+    userJourneyRemoteUrls: this.registry.userJourneyRemoteUrls$,
     headerMfeRemoteUrl: this.registry.headerRemoteUrl$,
     footerMfeRemoteUrl: this.registry.footerRemoteUrl$,
     navigationMfeRemoteUrl: this.registry.navigationRemoteUrl$,
     modes: this.registry.structuralModes$,
-  });
+  }).pipe(tap(console.log));
 }

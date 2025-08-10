@@ -50,8 +50,23 @@ export interface IMfeRemote {
 @Injectable({ providedIn: 'root' })
 export class MfeRegistryService {
   http = inject(HttpClient);
+
   remotes = new BehaviorSubject<IMfeRemote[]>([]);
   remotes$ = this.remotes.asObservable();
+
+  // Structural MFE remote URLs
+  headerRemoteUrl$ = this.getRemoteUrlBySubType(StructuralSubType.HEADER);
+  footerRemoteUrl$ = this.getRemoteUrlBySubType(StructuralSubType.FOOTER);
+  navigationRemoteUrl$ = this.getRemoteUrlBySubType(StructuralSubType.NAV);
+
+  // user-journey MFE remote URLs
+  userJourneyRemoteUrls$ = this.remotes$.pipe(
+    map((remotes) =>
+      remotes
+        .filter((remote) => remote.type === MfeRemoteType.USER_JOURNEY)
+        .map((remote) => remote.remoteEntryUrl)
+    )
+  );
 
   // Reactive structural modes that MFEs can respond to
   structuralModes = new BehaviorSubject<StructuralOverrides>({
@@ -60,11 +75,6 @@ export class MfeRegistryService {
     footer: StructuralOverrideMode.FULL,
   });
   structuralModes$ = this.structuralModes.asObservable();
-
-  // This will be called when the router navigates to a new page
-  setStructuralMode(partial: Partial<StructuralOverrides>) {
-    this.structuralModes.next({ ...this.structuralModes.value, ...partial });
-  }
 
   // Helper method to get remote URL by structural sub type
   private getRemoteUrlBySubType(subType: StructuralSubType) {
@@ -77,10 +87,10 @@ export class MfeRegistryService {
     );
   }
 
-  // Structural MFE remote URLs
-  headerRemoteUrl$ = this.getRemoteUrlBySubType(StructuralSubType.HEADER);
-  footerRemoteUrl$ = this.getRemoteUrlBySubType(StructuralSubType.FOOTER);
-  navigationRemoteUrl$ = this.getRemoteUrlBySubType(StructuralSubType.NAV);
+  // This will be called when the router navigates to a new page
+  setStructuralMode(partial: Partial<StructuralOverrides>) {
+    this.structuralModes.next({ ...this.structuralModes.value, ...partial });
+  }
 
   // Called during provideAppInitializer
   loadMfeRemotes() {
