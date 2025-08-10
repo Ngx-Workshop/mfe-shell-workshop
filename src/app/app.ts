@@ -2,13 +2,13 @@ import { AsyncPipe } from '@angular/common';
 import { Component, inject } from '@angular/core';
 import { MatButtonModule } from '@angular/material/button';
 import { RouterOutlet } from '@angular/router';
-import { combineLatest, tap } from 'rxjs';
+import { combineLatest } from 'rxjs';
+import { StructuralMfeComponent } from './components/structural-mfe';
 import {
   MfeRegistryService,
   StructuralNavOverrideMode,
   StructuralOverrideMode,
 } from './services/mfe-registry.service';
-import { StructuralMfeComponent } from './structural-mfe';
 
 @Component({
   selector: 'ngx-root',
@@ -93,5 +93,5 @@ export class App {
     footerMfeRemoteUrl: this.registry.footerRemoteUrl$,
     navigationMfeRemoteUrl: this.registry.navigationRemoteUrl$,
     modes: this.registry.structuralModes$,
-  }).pipe(tap(console.log));
+  });
 }

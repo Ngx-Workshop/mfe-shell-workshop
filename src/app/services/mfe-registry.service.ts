@@ -52,7 +52,9 @@ export class MfeRegistryService {
   http = inject(HttpClient);
 
   remotes = new BehaviorSubject<IMfeRemote[]>([]);
-  remotes$ = this.remotes.asObservable();
+  remotes$ = this.remotes
+    .asObservable()
+    .pipe(map((remotes) => this.getUpdatedRemotesFromLocalStorage(remotes)));
 
   // Structural MFE remote URLs
   headerRemoteUrl$ = this.getRemoteUrlBySubType(StructuralSubType.HEADER);
@@ -85,6 +87,32 @@ export class MfeRegistryService {
             ?.remoteEntryUrl
       )
     );
+  }
+
+  private getUpdatedRemotesFromLocalStorage(
+    remotes: IMfeRemote[]
+  ): IMfeRemote[] {
+    console.log(
+      '[MFE REGISTRY] Checking local storage for remote overrides',
+      remotes
+    );
+    const updatedRemotes = remotes.map((remote) => {
+      const localStorageKey = `mfe-remote-${remote._id}`;
+      const localStorageValue = localStorage.getItem(localStorageKey);
+      if (localStorageValue) {
+        try {
+          const parsedValue = JSON.parse(localStorageValue);
+          return { ...remote, remoteEntryUrl: parsedValue.remoteEntryUrl };
+        } catch (error) {
+          console.error(
+            `Error parsing local storage value for ${localStorageKey}`,
+            error
+          );
+        }
+      }
+      return remote;
+    });
+    return updatedRemotes;
   }
 
   // This will be called when the router navigates to a new page
