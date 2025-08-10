@@ -1,5 +1,7 @@
+import { loadRemoteModule } from '@angular-architects/module-federation';
 import { HttpClient } from '@angular/common/http';
 import { inject, Injectable } from '@angular/core';
+import { Router, Routes } from '@angular/router';
 import { BehaviorSubject, map, shareReplay, tap } from 'rxjs';
 
 export enum MfeRemoteType {
@@ -47,6 +49,10 @@ export interface IMfeRemote {
   __v?: number;
 }
 
+export function toSlug(value: string): string {
+  return value.trim().toLowerCase().replace(/\s+/g, '-');
+}
+
 @Injectable({ providedIn: 'root' })
 export class MfeRegistryService {
   http = inject(HttpClient);
@@ -62,12 +68,12 @@ export class MfeRegistryService {
   footerRemoteUrl$ = this.getRemoteUrlBySubType(StructuralSubType.FOOTER);
   navigationRemoteUrl$ = this.getRemoteUrlBySubType(StructuralSubType.NAV);
 
-  // user-journey MFE remote URLs
-  userJourneyRemoteUrls$ = this.remotes$.pipe(
+  // user-journey MFE remote
+  userJourneyRemotes$ = this.remotes$.pipe(
     map((remotes) =>
       remotes
         .filter((remote) => remote.type === MfeRemoteType.USER_JOURNEY)
-        .map((remote) => remote.remoteEntryUrl)
+        .map((remote) => remote)
     )
   );
 
@@ -115,5 +121,34 @@ export class MfeRegistryService {
     return this.http
       .get<IMfeRemote[]>('/api/mfe-remotes')
       .pipe(tap((remotes) => this.remotes.next(remotes)));
+  }
+
+  /**
+   * Build `Routes` from current user-journey remotes.
+   * Path = slug(name), remoteEntry = remoteEntryUrl
+   */
+  buildUserJourneyRoutes(): Routes {
+    return this.remotes.value
+      .filter((r) => r.type === MfeRemoteType.USER_JOURNEY)
+      .map((r) => ({
+        path: toSlug(r.name),
+        loadComponent: () =>
+          loadRemoteModule({
+            type: 'module',
+            remoteEntry: r.remoteEntryUrl,
+            exposedModule: './Component',
+          }).then((m) => m.App),
+      }));
+  }
+
+  /**
+   * Register dynamic routes on the router. Optionally merge with provided static routes.
+   * Call this after `loadMfeRemotes()` resolves (e.g., from an APP_INITIALIZER).
+   */
+  registerUserJourneyRoutes(router: Router, staticRoutes: Routes = []): void {
+    const dynamic = this.buildUserJourneyRoutes();
+    router.resetConfig([...staticRoutes, ...dynamic]);
+    // Optional: log for visibility
+    console.log('[MFE REGISTRY] Registered dynamic routes:', dynamic);
   }
 }

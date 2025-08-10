@@ -88,7 +88,7 @@ export class App {
 
   // URL for the header structural MFE and the current structural modes
   protected viewModel$ = combineLatest({
-    userJourneyRemoteUrls: this.registry.userJourneyRemoteUrls$,
+    userJourneyRemotes: this.registry.userJourneyRemotes$,
     headerMfeRemoteUrl: this.registry.headerRemoteUrl$,
     footerMfeRemoteUrl: this.registry.footerRemoteUrl$,
     navigationMfeRemoteUrl: this.registry.navigationRemoteUrl$,

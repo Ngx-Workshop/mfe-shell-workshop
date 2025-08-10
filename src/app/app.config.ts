@@ -9,15 +9,22 @@ import {
 import { MatIconRegistry } from '@angular/material/icon';
 import { DomSanitizer } from '@angular/platform-browser';
 import { provideAnimationsAsync } from '@angular/platform-browser/animations/async';
-import { provideRouter } from '@angular/router';
-import { firstValueFrom } from 'rxjs';
+import { provideRouter, Router } from '@angular/router';
+import { firstValueFrom, tap } from 'rxjs';
 import { registerIcons } from './app.icons';
 import { routes } from './app.routes';
 import { MfeRegistryService } from './services/mfe-registry.service';
 
 function initializerFn() {
   const mfeRegistryService = inject(MfeRegistryService);
-  return firstValueFrom(mfeRegistryService.loadMfeRemotes());
+  const router = inject(Router);
+  return firstValueFrom(
+    mfeRegistryService
+      .loadMfeRemotes()
+      .pipe(
+        tap(() => mfeRegistryService.registerUserJourneyRoutes(router, routes))
+      )
+  );
 }
 
 export const appConfig: ApplicationConfig = {
