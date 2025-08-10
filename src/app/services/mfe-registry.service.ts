@@ -100,6 +100,10 @@ export class MfeRegistryService {
     const updatedRemotes = remotes.map((remote) => {
       const localStorageKey = `mfe-remote-${remote._id}`;
       const localStorageValue = localStorage.getItem(localStorageKey);
+      console.log(
+        `[MFE REGISTRY] Local storage value for ${localStorageKey}:`,
+        localStorageValue
+      );
       if (localStorageValue) {
         try {
           const parsedValue = JSON.parse(localStorageValue);
