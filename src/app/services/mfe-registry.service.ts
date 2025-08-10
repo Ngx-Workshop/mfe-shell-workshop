@@ -66,35 +66,23 @@ export class MfeRegistryService {
     this.structuralModes.next({ ...this.structuralModes.value, ...partial });
   }
 
-  // Find the remote URL for the header structural MFE
-  headerRemoteUrl$ = this.remotes$.pipe(
-    map(
-      (remotes) =>
-        remotes.find(
-          (remote) => remote.structuralSubType === StructuralSubType.HEADER
-        )?.remoteEntryUrl
-    )
-  );
+  // Helper method to get remote URL by structural sub type
+  private getRemoteUrlBySubType(subType: StructuralSubType) {
+    return this.remotes$.pipe(
+      map(
+        (remotes) =>
+          remotes.find((remote) => remote.structuralSubType === subType)
+            ?.remoteEntryUrl
+      )
+    );
+  }
 
-  footerRemoteUrl$ = this.remotes$.pipe(
-    map(
-      (remotes) =>
-        remotes.find(
-          (remote) => remote.structuralSubType === StructuralSubType.FOOTER
-        )?.remoteEntryUrl
-    )
-  );
+  // Structural MFE remote URLs
+  headerRemoteUrl$ = this.getRemoteUrlBySubType(StructuralSubType.HEADER);
+  footerRemoteUrl$ = this.getRemoteUrlBySubType(StructuralSubType.FOOTER);
+  navigationRemoteUrl$ = this.getRemoteUrlBySubType(StructuralSubType.NAV);
 
-  navigationRemoteUrl$ = this.remotes$.pipe(
-    map(
-      (remotes) =>
-        remotes.find(
-          (remote) => remote.structuralSubType === StructuralSubType.NAV
-        )?.remoteEntryUrl
-    )
-  );
-
-  // Called durring provideAppInitializer
+  // Called during provideAppInitializer
   loadMfeRemotes() {
     return this.http
       .get<IMfeRemote[]>('/api/mfe-remotes')
