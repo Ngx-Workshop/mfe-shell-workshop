@@ -15,11 +15,15 @@ import { StructuralMfeComponent } from './structural-mfe';
   imports: [RouterOutlet, MatButtonModule, AsyncPipe, StructuralMfeComponent],
   template: `
     @if(viewModel$ | async; as vm) {
-    <ngx-structural-mfe
-      [mfeRemoteUrl]="vm.navigationMfeRemoteUrl ?? ''"
-      [mode]="vm.modes.nav ?? VERBOSE"
-    ></ngx-structural-mfe>
     <div class="layout">
+      <aside class="nav">
+        <ngx-structural-mfe
+          class="nav-mfe"
+          [mfeRemoteUrl]="vm.navigationMfeRemoteUrl ?? ''"
+          [mode]="vm.modes.nav ?? VERBOSE"
+        ></ngx-structural-mfe>
+      </aside>
+
       <header>
         <ngx-structural-mfe
           [mfeRemoteUrl]="vm.headerMfeRemoteUrl ?? ''"
@@ -44,21 +48,35 @@ import { StructuralMfeComponent } from './structural-mfe';
     `
       .layout {
         display: grid;
+        grid-template-columns: 110px 1fr;
         grid-template-rows: auto 1fr auto;
         grid-template-areas:
-          'header'
-          'main'
-          'footer';
+          'nav header'
+          'nav main'
+          'nav footer';
         min-height: 100dvh;
+      }
+      .nav {
+        grid-area: nav;
+        overflow: hidden;
       }
       header {
         grid-area: header;
       }
       main {
         grid-area: main;
+        min-width: 0;
       }
       footer {
         grid-area: footer;
+      }
+      /* Collapse to a single-column layout when the nav MFE is hidden or not rendered */
+      .layout:not(:has(.nav-mfe:not([hidden]))) {
+        grid-template-columns: 1fr;
+        grid-template-areas:
+          'header'
+          'main'
+          'footer';
       }
     `,
   ],
