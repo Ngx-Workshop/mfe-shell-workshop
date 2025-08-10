@@ -93,30 +93,15 @@ export class MfeRegistryService {
   private getUpdatedRemotesFromLocalStorage(
     remotes: IMfeRemote[]
   ): IMfeRemote[] {
-    console.log(
-      '[MFE REGISTRY] Checking local storage for remote overrides',
-      remotes
-    );
     const updatedRemotes = remotes.map((remote) => {
       const localStorageKey = `mfe-remote-${remote._id}`;
-      const localStorageValue = localStorage.getItem(localStorageKey);
-      console.log(
-        `[MFE REGISTRY] Local storage value for ${localStorageKey}:`,
-        localStorageValue
-      );
-      if (localStorageValue) {
-        try {
-          const parsedValue = localStorageValue;
-          return { ...remote, remoteEntryUrl: parsedValue };
-        } catch (error) {
-          console.error(
-            `Error parsing local storage value for ${localStorageKey}`,
-            error
-          );
-        }
-      }
-      return remote;
+      const remoteEntryUrl = localStorage.getItem(localStorageKey);
+      return remoteEntryUrl ? { ...remote, remoteEntryUrl } : remote;
     });
+    console.log(
+      '[MFE REGISTRY] Updated remotes from local storage:',
+      updatedRemotes
+    );
     return updatedRemotes;
   }
 
