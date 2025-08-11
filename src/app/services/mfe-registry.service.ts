@@ -99,6 +99,10 @@ export class MfeRegistryService {
     const updatedRemotes = remotes.map((remote) => {
       const localStorageKey = `mfe-remote:${remote._id}`;
       const remoteEntryUrl = localStorage.getItem(localStorageKey);
+      console.log(
+        `[MFE REGISTRY] Checking local storage for remote ${remote.name}:`,
+        remoteEntryUrl ? `Found URL: ${remoteEntryUrl}` : 'No URL found'
+      );
       return remoteEntryUrl ? { ...remote, remoteEntryUrl } : remote;
     });
     console.log(
