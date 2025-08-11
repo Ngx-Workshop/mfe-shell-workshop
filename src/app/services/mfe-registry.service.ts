@@ -97,7 +97,7 @@ export class MfeRegistryService {
     remotes: IMfeRemote[]
   ): IMfeRemote[] {
     const updatedRemotes = remotes.map((remote) => {
-      const localStorageKey = `mfe-remote-${remote._id}`;
+      const localStorageKey = `mfe-remote:${remote._id}`;
       const remoteEntryUrl = localStorage.getItem(localStorageKey);
       return remoteEntryUrl ? { ...remote, remoteEntryUrl } : remote;
     });
