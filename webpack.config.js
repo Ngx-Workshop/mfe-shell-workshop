@@ -47,11 +47,12 @@ module.exports = withModuleFederationPlugin({
     },
 
     // RxJS + tslib
-    rxjs: { singleton: true, strictVersion: true, requiredVersion: 'auto' },
-    tslib: { singleton: true, strictVersion: true, requiredVersion: 'auto' },
-
-    // Only if you’re NOT zoneless:
-    'zone.js': {
+    rxjs: {
+      singleton: true,
+      strictVersion: true,
+      requiredVersion: 'auto',
+    },
+    tslib: {
       singleton: true,
       strictVersion: true,
       requiredVersion: 'auto',
