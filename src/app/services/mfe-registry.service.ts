@@ -85,6 +85,7 @@ export class MfeRegistryService {
   // Helper method to get remote URL by structural sub type
   private getRemoteUrlBySubType(subType: StructuralSubType) {
     return this.remotes$.pipe(
+      map((remotes) => this.getUpdatedRemotesFromLocalStorage(remotes)),
       map(
         (remotes) =>
           remotes.find((remote) => remote.structuralSubType === subType)
