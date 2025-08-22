@@ -4,7 +4,7 @@ import { Routes } from '@angular/router';
 export const routes: Routes = [
   {
     path: '',
-    redirectTo: '/seed-mfe',
+    redirectTo: '/landing-page',
     pathMatch: 'full',
   },
 ];
