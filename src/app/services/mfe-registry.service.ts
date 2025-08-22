@@ -61,15 +61,23 @@ export class MfeRegistryService {
   remotes$ = this.remotes.asObservable();
 
   // Structural MFE remote URLs
-  headerRemoteUrl$ = this.getRemoteUrlBySubType(StructuralSubType.HEADER);
-  footerRemoteUrl$ = this.getRemoteUrlBySubType(StructuralSubType.FOOTER);
-  navigationRemoteUrl$ = this.getRemoteUrlBySubType(StructuralSubType.NAV);
+  headerRemoteUrl$ = this.getRemoteUrlBySubType(
+    StructuralSubType.HEADER
+  );
+  footerRemoteUrl$ = this.getRemoteUrlBySubType(
+    StructuralSubType.FOOTER
+  );
+  navigationRemoteUrl$ = this.getRemoteUrlBySubType(
+    StructuralSubType.NAV
+  );
 
   // user-journey MFE remote
   userJourneyRemotes$ = this.remotes$.pipe(
     map((remotes) =>
       remotes
-        .filter((remote) => remote.type === MfeRemoteType.USER_JOURNEY)
+        .filter(
+          (remote) => remote.type === MfeRemoteType.USER_JOURNEY
+        )
         .map((remote) => remote)
     )
   );
@@ -85,11 +93,14 @@ export class MfeRegistryService {
   // Helper method to get remote URL by structural sub type
   private getRemoteUrlBySubType(subType: StructuralSubType) {
     return this.remotes$.pipe(
-      map((remotes) => this.getUpdatedRemotesFromLocalStorage(remotes)),
+      map((remotes) =>
+        this.getUpdatedRemotesFromLocalStorage(remotes)
+      ),
       map(
         (remotes) =>
-          remotes.find((remote) => remote.structuralSubType === subType)
-            ?.remoteEntryUrl
+          remotes.find(
+            (remote) => remote.structuralSubType === subType
+          )?.remoteEntryUrl
       )
     );
   }
@@ -107,7 +118,10 @@ export class MfeRegistryService {
 
   // This will be called when the router navigates to a new page
   setStructuralMode(partial: Partial<StructuralOverrides>) {
-    this.structuralModes.next({ ...this.structuralModes.value, ...partial });
+    this.structuralModes.next({
+      ...this.structuralModes.value,
+      ...partial,
+    });
   }
 
   // Called during provideAppInitializer
@@ -139,10 +153,29 @@ export class MfeRegistryService {
    * Register dynamic routes on the router. Optionally merge with provided static routes.
    * Call this after `loadMfeRemotes()` resolves (e.g., from an APP_INITIALIZER).
    */
-  registerUserJourneyRoutes(router: Router, staticRoutes: Routes = []): void {
+  registerUserJourneyRoutes(
+    router: Router,
+    staticRoutes: Routes = []
+  ): void {
     const dynamic = this.buildUserJourneyRoutes();
     router.resetConfig([...staticRoutes, ...dynamic]);
-    // Optional: log for visibility
-    console.log('[MFE REGISTRY] Registered dynamic routes:', dynamic);
+
+    console.log(
+      '%c[MFE REGISTRY] Registered dynamic routes:',
+      'color: green; font-weight: bold;',
+      dynamic
+    );
+
+    this.testing();
+  }
+
+  testing() {
+    // Log the caller of this method
+    const err = new Error();
+    const callerLine = err.stack?.split('\n')[2];
+    console.log(
+      `%c[MFE REGISTRY] Called from: ${callerLine}`,
+      'color: blue; font-weight: bold;'
+    );
   }
 }
