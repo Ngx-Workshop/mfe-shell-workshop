@@ -165,17 +165,5 @@ export class MfeRegistryService {
       'color: green; font-weight: bold;',
       dynamic
     );
-
-    this.testing();
-  }
-
-  testing() {
-    // Log the caller of this method
-    const err = new Error();
-    const callerLine = err.stack?.split('\n')[2];
-    console.log(
-      `%c[MFE REGISTRY] Called from: ${callerLine}`,
-      'color: blue; font-weight: bold;'
-    );
   }
 }
