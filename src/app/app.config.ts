@@ -6,12 +6,9 @@ import {
   provideBrowserGlobalErrorListeners,
   provideZonelessChangeDetection,
 } from '@angular/core';
-import { MatIconRegistry } from '@angular/material/icon';
-import { DomSanitizer } from '@angular/platform-browser';
 import { provideAnimationsAsync } from '@angular/platform-browser/animations/async';
 import { provideRouter, Router } from '@angular/router';
 import { firstValueFrom, tap } from 'rxjs';
-import { registerIcons } from './app.icons';
 import { routes } from './app.routes';
 import { MfeRegistryService } from './services/mfe-registry.service';
 
@@ -22,7 +19,9 @@ function initializerFn() {
     mfeRegistryService
       .loadMfeRemotes()
       .pipe(
-        tap(() => mfeRegistryService.registerUserJourneyRoutes(router, routes))
+        tap(() =>
+          mfeRegistryService.registerUserJourneyRoutes(router, routes)
+        )
       )
   );
 }
@@ -30,9 +29,9 @@ function initializerFn() {
 export const appConfig: ApplicationConfig = {
   providers: [
     provideAppInitializer(initializerFn),
-    provideAppInitializer(() =>
-      registerIcons(inject(MatIconRegistry), inject(DomSanitizer))()
-    ),
+    // provideAppInitializer(() =>
+    //   registerIcons(inject(MatIconRegistry), inject(DomSanitizer))()
+    // ),
     provideHttpClient(),
     provideBrowserGlobalErrorListeners(),
     provideZonelessChangeDetection(),
