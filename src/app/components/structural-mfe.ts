@@ -19,7 +19,9 @@ import {
 export class StructuralMfeComponent implements OnInit {
   protected viewContainer = inject(ViewContainerRef);
   mfeRemoteUrl = input.required<string>();
-  mode = input.required<StructuralOverrideMode | StructuralNavOverrideMode>();
+  mode = input.required<
+    StructuralOverrideMode | StructuralNavOverrideMode
+  >();
   private cmpRef?: ComponentRef<any>;
 
   async ngOnInit() {
@@ -30,8 +32,15 @@ export class StructuralMfeComponent implements OnInit {
         exposedModule: './Component',
       });
 
-      this.cmpRef = this.viewContainer.createComponent(remoteComponent.default);
-      this.cmpRef.setInput?.('mode', this.mode());
+      if (
+        this.mode() !== StructuralOverrideMode.DISABLED ||
+        this.mode() !== StructuralNavOverrideMode.DISABLED
+      ) {
+        this.cmpRef = this.viewContainer.createComponent(
+          remoteComponent.default
+        );
+        this.cmpRef.setInput?.('mode', this.mode());
+      }
 
       // effect(() => {
       //   if (this.cmpRef) {
