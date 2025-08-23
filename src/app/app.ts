@@ -12,7 +12,12 @@ import {
 
 @Component({
   selector: 'ngx-root',
-  imports: [RouterOutlet, MatButtonModule, AsyncPipe, StructuralMfeComponent],
+  imports: [
+    RouterOutlet,
+    MatButtonModule,
+    AsyncPipe,
+    StructuralMfeComponent,
+  ],
   template: `
     @if(viewModel$ | async; as vm) {
     <div class="layout">
@@ -55,17 +60,28 @@ import {
           'nav main'
           'nav footer';
         min-height: 100dvh;
+        height: 100dvh;
+        overflow: hidden;
       }
       .nav {
         grid-area: nav;
         overflow: hidden;
+        position: sticky;
+        top: 0;
+        height: 100dvh;
+        z-index: 2;
       }
       header {
         grid-area: header;
+        position: sticky;
+        top: 0;
+        z-index: 3;
       }
       main {
         grid-area: main;
         min-width: 0;
+        overflow: auto;
+        height: 100%;
       }
       footer {
         grid-area: footer;
