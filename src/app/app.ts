@@ -61,12 +61,11 @@ import {
           'nav footer';
         min-height: 100dvh;
         height: 100dvh;
-        /* Remove overflow: hidden so main can scroll */
       }
       .nav {
         grid-area: nav;
         overflow: hidden;
-        position: sticky;
+        position: fixed;
         top: 0;
         height: 100dvh;
         z-index: 2;
@@ -79,13 +78,9 @@ import {
       }
       main {
         grid-area: main;
-        min-width: 0;
-        overflow: auto;
-        height: 100%;
       }
       footer {
         grid-area: footer;
-        /* No sticky or fixed positioning for footer */
       }
       /* Collapse to a single-column layout when the nav MFE is hidden or not rendered */
       .layout:not(:has(.nav-mfe:not([hidden]))) {
