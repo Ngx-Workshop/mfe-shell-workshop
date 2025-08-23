@@ -8,6 +8,10 @@ import {
   ViewContainerRef,
 } from '@angular/core';
 import {
+  takeUntilDestroyed,
+  toObservable,
+} from '@angular/core/rxjs-interop';
+import {
   StructuralNavOverrideMode,
   StructuralOverrideMode,
 } from '../services/mfe-registry.service';
@@ -22,7 +26,17 @@ export class StructuralMfeComponent implements OnInit {
   mode = input.required<
     StructuralOverrideMode | StructuralNavOverrideMode
   >();
+  mode$ = toObservable(this.mode);
   private cmpRef?: ComponentRef<any>;
+
+  constructor() {
+    this.mode$.pipe(takeUntilDestroyed()).subscribe((mode) => {
+      console.log('[MFE MODE]', mode);
+      if (this.cmpRef) {
+        this.cmpRef.setInput?.('mode', mode);
+      }
+    });
+  }
 
   async ngOnInit() {
     try {
@@ -31,11 +45,9 @@ export class StructuralMfeComponent implements OnInit {
         remoteEntry: this.mfeRemoteUrl(),
         exposedModule: './Component',
       });
-
       this.cmpRef = this.viewContainer.createComponent(
         remoteComponent.default
       );
-      this.cmpRef.setInput?.('mode', this.mode());
     } catch (error) {
       console.error('[MFE LOAD ERROR]', error);
     }
