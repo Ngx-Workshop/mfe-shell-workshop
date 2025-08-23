@@ -1,8 +1,14 @@
 import { AsyncPipe } from '@angular/common';
 import { Component, inject } from '@angular/core';
+import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { MatButtonModule } from '@angular/material/button';
-import { RouterOutlet } from '@angular/router';
-import { combineLatest } from 'rxjs';
+import {
+  ActivatedRoute,
+  NavigationEnd,
+  Router,
+  RouterOutlet,
+} from '@angular/router';
+import { combineLatest, filter } from 'rxjs';
 import { StructuralMfeComponent } from './components/structural-mfe';
 import {
   MfeRegistryService,
@@ -97,6 +103,8 @@ export class App {
   protected readonly FULL = StructuralOverrideMode.FULL;
   protected readonly VERBOSE = StructuralNavOverrideMode.VERBOSE;
   private registry = inject(MfeRegistryService);
+  private router = inject(Router);
+  private route = inject(ActivatedRoute);
 
   // URL for the header structural MFE and the current structural modes
   protected viewModel$ = combineLatest({
@@ -106,4 +114,22 @@ export class App {
     navigationMfeRemoteUrl: this.registry.navigationRemoteUrl$,
     modes: this.registry.structuralModes$,
   });
+
+  constructor() {
+    this.router.events
+      .pipe(
+        takeUntilDestroyed(),
+        filter((e): e is NavigationEnd => e instanceof NavigationEnd)
+      )
+      .subscribe(() => {
+        // find deepest active route
+        let current = this.route.firstChild;
+        while (current && current.firstChild) {
+          current = current.firstChild;
+        }
+        const overrides =
+          current?.snapshot.data?.['structuralOverrides'];
+        this.registry.setStructuralMode(overrides ? overrides : {});
+      });
+  }
 }

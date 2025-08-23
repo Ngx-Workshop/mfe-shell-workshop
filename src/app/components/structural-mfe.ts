@@ -32,22 +32,10 @@ export class StructuralMfeComponent implements OnInit {
         exposedModule: './Component',
       });
 
-      console.log('[MFE MODE]', this.mode());
-      if (
-        this.mode() !== StructuralOverrideMode.DISABLED ||
-        this.mode() !== StructuralNavOverrideMode.DISABLED
-      ) {
-        this.cmpRef = this.viewContainer.createComponent(
-          remoteComponent.default
-        );
-        this.cmpRef.setInput?.('mode', this.mode());
-      }
-
-      // effect(() => {
-      //   if (this.cmpRef) {
-      //     this.cmpRef.setInput?.('mode', this.mode());
-      //   }
-      // });
+      this.cmpRef = this.viewContainer.createComponent(
+        remoteComponent.default
+      );
+      this.cmpRef.setInput?.('mode', this.mode());
     } catch (error) {
       console.error('[MFE LOAD ERROR]', error);
     }

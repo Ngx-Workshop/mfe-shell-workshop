@@ -140,6 +140,7 @@ export class MfeRegistryService {
       .filter((r) => r.type === MfeRemoteType.USER_JOURNEY)
       .map((r) => ({
         path: toSlug(r.name),
+        data: { structuralOverrides: r.structuralOverrides },
         loadComponent: () =>
           loadRemoteModule({
             type: 'module',
