@@ -31,7 +31,7 @@ export class StructuralMfeComponent implements OnInit {
 
   constructor() {
     this.mode$.pipe(takeUntilDestroyed()).subscribe((mode) => {
-      console.log('[MFE MODE]', mode);
+      console.log('[MFE MODE]', mode, this.cmpRef);
       if (this.cmpRef) {
         this.cmpRef.setInput?.('mode', mode);
       }
