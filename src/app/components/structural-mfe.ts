@@ -32,6 +32,7 @@ export class StructuralMfeComponent implements OnInit {
         exposedModule: './Component',
       });
 
+      console.log('[MFE MODE]', this.mode());
       if (
         this.mode() !== StructuralOverrideMode.DISABLED ||
         this.mode() !== StructuralNavOverrideMode.DISABLED
