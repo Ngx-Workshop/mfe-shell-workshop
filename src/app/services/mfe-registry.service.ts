@@ -4,50 +4,9 @@ import { inject, Injectable } from '@angular/core';
 import { Router, Routes } from '@angular/router';
 import { BehaviorSubject, map, tap } from 'rxjs';
 
-export enum MfeRemoteType {
-  STRUCTURAL = 'structural',
-  USER_JOURNEY = 'user-journey',
-}
-
-export enum StructuralOverrideMode {
-  FULL = 'full',
-  RELEXED = 'relexed',
-  COMPACT = 'compact',
-  DISABLED = 'disabled',
-}
-
-export enum StructuralNavOverrideMode {
-  VERBOSE = 'verbose',
-  MINIMAL = 'minimal',
-  DISABLED = 'disabled',
-}
-
-export enum StructuralSubType {
-  HEADER = 'header',
-  NAV = 'nav',
-  FOOTER = 'footer',
-}
-
-export type StructuralOverrides = {
-  header?: StructuralOverrideMode;
-  nav?: StructuralNavOverrideMode;
-  footer?: StructuralOverrideMode;
-};
-
-export interface IMfeRemote {
-  _id: string;
-  name: string;
-  remoteEntryUrl: string;
-  type: MfeRemoteType;
-  structuralOverrides?: StructuralOverrides;
-  structuralSubType?: StructuralSubType;
-  version: number;
-  status?: string;
-  description?: string;
-  lastUpdated?: Date;
-  archived?: boolean;
-  __v?: number;
-}
+import type { MfeRemoteDto } from '@tmdjr/ngx-mfe-orchestrator-contracts';
+type StructuralOverrides = MfeRemoteDto['structuralOverrides'];
+type StructuralSubType = MfeRemoteDto['structuralSubType'];
 
 export function toSlug(value: string): string {
   return value.trim().toLowerCase().replace(/\s+/g, '-');
@@ -57,36 +16,28 @@ export function toSlug(value: string): string {
 export class MfeRegistryService {
   http = inject(HttpClient);
 
-  remotes = new BehaviorSubject<IMfeRemote[]>([]);
+  remotes = new BehaviorSubject<MfeRemoteDto[]>([]);
   remotes$ = this.remotes.asObservable();
 
   // Structural MFE remote URLs
-  headerRemoteUrl$ = this.getRemoteUrlBySubType(
-    StructuralSubType.HEADER
-  );
-  footerRemoteUrl$ = this.getRemoteUrlBySubType(
-    StructuralSubType.FOOTER
-  );
-  navigationRemoteUrl$ = this.getRemoteUrlBySubType(
-    StructuralSubType.NAV
-  );
+  headerRemoteUrl$ = this.getRemoteUrlBySubType('header');
+  footerRemoteUrl$ = this.getRemoteUrlBySubType('footer');
+  navigationRemoteUrl$ = this.getRemoteUrlBySubType('nav');
 
   // user-journey MFE remote
   userJourneyRemotes$ = this.remotes$.pipe(
     map((remotes) =>
       remotes
-        .filter(
-          (remote) => remote.type === MfeRemoteType.USER_JOURNEY
-        )
+        .filter((remote) => remote.type === 'user-journey')
         .map((remote) => remote)
     )
   );
 
   // Reactive structural modes that MFEs can respond to
   structuralModes = new BehaviorSubject<StructuralOverrides>({
-    header: StructuralOverrideMode.FULL,
-    nav: StructuralNavOverrideMode.VERBOSE,
-    footer: StructuralOverrideMode.FULL,
+    header: 'full',
+    nav: 'verbose',
+    footer: 'full',
   });
   structuralModes$ = this.structuralModes.asObservable();
 
@@ -106,8 +57,8 @@ export class MfeRegistryService {
   }
 
   private getUpdatedRemotesFromLocalStorage(
-    remotes: IMfeRemote[]
-  ): IMfeRemote[] {
+    remotes: MfeRemoteDto[]
+  ): MfeRemoteDto[] {
     const updatedRemotes = remotes.map((remote) => {
       const localStorageKey = `mfe-remotes:${remote._id}`;
       const remoteEntryUrl = localStorage.getItem(localStorageKey);
@@ -127,7 +78,7 @@ export class MfeRegistryService {
   // Called during provideAppInitializer
   loadMfeRemotes() {
     return this.http
-      .get<IMfeRemote[]>('/api/mfe-remotes')
+      .get<MfeRemoteDto[]>('/api/mfe-remotes')
       .pipe(tap((remotes) => this.remotes.next(remotes)));
   }
 
@@ -137,7 +88,7 @@ export class MfeRegistryService {
    */
   buildUserJourneyRoutes(): Routes {
     return this.getUpdatedRemotesFromLocalStorage(this.remotes.value)
-      .filter((r) => r.type === MfeRemoteType.USER_JOURNEY)
+      .filter((r) => r.type === 'user-journey')
       .map((r) => ({
         path: toSlug(r.name),
         data: { structuralOverrides: r.structuralOverrides },

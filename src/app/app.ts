@@ -10,11 +10,7 @@ import {
 } from '@angular/router';
 import { combineLatest, filter } from 'rxjs';
 import { StructuralMfeComponent } from './components/structural-mfe';
-import {
-  MfeRegistryService,
-  StructuralNavOverrideMode,
-  StructuralOverrideMode,
-} from './services/mfe-registry.service';
+import { MfeRegistryService } from './services/mfe-registry.service';
 
 @Component({
   selector: 'ngx-root',
@@ -31,14 +27,14 @@ import {
         <ngx-structural-mfe
           class="nav-mfe"
           [mfeRemoteUrl]="vm.navigationMfeRemoteUrl ?? ''"
-          [mode]="vm.modes.nav ?? VERBOSE"
+          [mode]="vm.modes?.nav ?? VERBOSE"
         ></ngx-structural-mfe>
       </aside>
 
       <header>
         <ngx-structural-mfe
           [mfeRemoteUrl]="vm.headerMfeRemoteUrl ?? ''"
-          [mode]="vm.modes.header ?? FULL"
+          [mode]="vm.modes?.header ?? FULL"
         ></ngx-structural-mfe>
       </header>
 
@@ -49,7 +45,7 @@ import {
       <footer>
         <ngx-structural-mfe
           [mfeRemoteUrl]="vm.footerMfeRemoteUrl ?? ''"
-          [mode]="vm.modes.footer ?? FULL"
+          [mode]="vm.modes?.footer ?? FULL"
         ></ngx-structural-mfe>
       </footer>
     </div>
@@ -100,8 +96,8 @@ import {
   ],
 })
 export class App {
-  protected readonly FULL = StructuralOverrideMode.FULL;
-  protected readonly VERBOSE = StructuralNavOverrideMode.VERBOSE;
+  protected readonly FULL = 'full';
+  protected readonly VERBOSE = 'verbose';
   private registry = inject(MfeRegistryService);
   private router = inject(Router);
   private route = inject(ActivatedRoute);
