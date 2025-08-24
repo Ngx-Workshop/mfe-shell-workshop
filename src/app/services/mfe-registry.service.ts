@@ -4,9 +4,11 @@ import { inject, Injectable } from '@angular/core';
 import { Router, Routes } from '@angular/router';
 import { BehaviorSubject, map, tap } from 'rxjs';
 
-import type { MfeRemoteDto } from '@tmdjr/ngx-mfe-orchestrator-contracts';
-type StructuralOverrides = MfeRemoteDto['structuralOverrides'];
-type StructuralSubType = MfeRemoteDto['structuralSubType'];
+import type {
+  MfeRemoteDto,
+  StructuralOverridesDto,
+  StructuralSubType,
+} from '@tmdjr/ngx-mfe-orchestrator-contracts';
 
 export function toSlug(value: string): string {
   return value.trim().toLowerCase().replace(/\s+/g, '-');
@@ -34,7 +36,7 @@ export class MfeRegistryService {
   );
 
   // Reactive structural modes that MFEs can respond to
-  structuralModes = new BehaviorSubject<StructuralOverrides>({
+  structuralModes = new BehaviorSubject<StructuralOverridesDto>({
     header: 'full',
     nav: 'verbose',
     footer: 'full',
@@ -68,7 +70,7 @@ export class MfeRegistryService {
   }
 
   // This will be called when the router navigates to a new page
-  setStructuralMode(partial: Partial<StructuralOverrides>) {
+  setStructuralMode(partial: Partial<StructuralOverridesDto>) {
     this.structuralModes.next({
       ...this.structuralModes.value,
       ...partial,
