@@ -27,14 +27,14 @@ import { MfeRegistryService } from './services/mfe-registry.service';
         <ngx-structural-mfe
           class="nav-mfe"
           [mfeRemoteUrl]="vm.navigationMfeRemoteUrl ?? ''"
-          [mode]="vm.modes?.nav ?? VERBOSE"
+          [mode]="vm.modes?.nav ?? 'verbose'"
         ></ngx-structural-mfe>
       </aside>
 
       <header>
         <ngx-structural-mfe
           [mfeRemoteUrl]="vm.headerMfeRemoteUrl ?? ''"
-          [mode]="vm.modes?.header ?? FULL"
+          [mode]="vm.modes?.header ?? 'full'"
         ></ngx-structural-mfe>
       </header>
 
@@ -45,7 +45,7 @@ import { MfeRegistryService } from './services/mfe-registry.service';
       <footer>
         <ngx-structural-mfe
           [mfeRemoteUrl]="vm.footerMfeRemoteUrl ?? ''"
-          [mode]="vm.modes?.footer ?? FULL"
+          [mode]="vm.modes?.footer ?? 'full'"
         ></ngx-structural-mfe>
       </footer>
     </div>
@@ -96,8 +96,6 @@ import { MfeRegistryService } from './services/mfe-registry.service';
   ],
 })
 export class App {
-  protected readonly FULL = 'full';
-  protected readonly VERBOSE = 'verbose';
   private registry = inject(MfeRegistryService);
   private router = inject(Router);
   private route = inject(ActivatedRoute);

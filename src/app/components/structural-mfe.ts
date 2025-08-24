@@ -11,11 +11,11 @@ import {
   takeUntilDestroyed,
   toObservable,
 } from '@angular/core/rxjs-interop';
+
 import {
   StructuralNavOverrideMode,
   StructuralOverrideMode,
-} from '../services/mfe-registry.service';
-
+} from '@tmdjr/ngx-mfe-orchestrator-contracts';
 @Component({
   selector: 'ngx-structural-mfe',
   template: ``,
