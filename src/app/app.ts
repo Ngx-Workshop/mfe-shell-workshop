@@ -22,7 +22,7 @@ import { MfeRegistryService } from './services/mfe-registry.service';
   ],
   template: `
     @if(viewModel$ | async; as vm) {
-    <div class="layout">
+    <div class="layout" [class.no-nav]="vm.modes.nav === 'disabled'">
       <aside class="nav">
         <ngx-structural-mfe
           class="nav-mfe"
@@ -85,7 +85,7 @@ import { MfeRegistryService } from './services/mfe-registry.service';
         grid-area: footer;
       }
       /* Collapse to a single-column layout when the nav MFE is hidden or not rendered */
-      .layout {
+      .layout.no-nav {
         grid-template-columns: 1fr;
         grid-template-areas:
           'header'
