@@ -57,7 +57,7 @@ module.exports = withModuleFederationPlugin({
     '@tmdjr/ngx-theme-picker': {
       singleton: true,
       strictVersion: true,
-      requiredVersion: '0.0.1',
+      requiredVersion: '0.0.2',
     },
   },
 });
