@@ -27,14 +27,14 @@ import { MfeRegistryService } from './services/mfe-registry.service';
         <ngx-structural-mfe
           class="nav-mfe"
           [mfeRemoteUrl]="vm.navigationMfeRemoteUrl ?? ''"
-          [mode]="vm.modes?.nav ?? 'verbose'"
+          [mode]="vm.modes.nav ?? 'verbose'"
         ></ngx-structural-mfe>
       </aside>
 
       <header>
         <ngx-structural-mfe
           [mfeRemoteUrl]="vm.headerMfeRemoteUrl ?? ''"
-          [mode]="vm.modes?.header ?? 'full'"
+          [mode]="vm.modes.header ?? 'full'"
         ></ngx-structural-mfe>
       </header>
 
@@ -45,7 +45,7 @@ import { MfeRegistryService } from './services/mfe-registry.service';
       <footer>
         <ngx-structural-mfe
           [mfeRemoteUrl]="vm.footerMfeRemoteUrl ?? ''"
-          [mode]="vm.modes?.footer ?? 'full'"
+          [mode]="vm.modes.footer ?? 'full'"
         ></ngx-structural-mfe>
       </footer>
     </div>
@@ -85,7 +85,7 @@ import { MfeRegistryService } from './services/mfe-registry.service';
         grid-area: footer;
       }
       /* Collapse to a single-column layout when the nav MFE is hidden or not rendered */
-      .layout:not(:has(.nav-mfe:not([hidden]))) {
+      .layout {
         grid-template-columns: 1fr;
         grid-template-areas:
           'header'
