@@ -1,4 +1,4 @@
-name: Deploy Angular Shell to DO Droplet
+name: Deploy Ngx-Workshop Shell to DO Droplet
 
 on:
   push:
@@ -29,8 +29,8 @@ jobs:
           host: ${{ secrets.DROPLET_IP }}
           username: root
           key: ${{ secrets.SSH_PRIVATE_KEY }}
-          source: "dist/ngx-workshop-shell/*"
-          target: "/opt/ngx-angular-shell/"
+          source: 'dist/mfe-shell-workshop/*'
+          target: '/opt/mfe-shell-workshop/'
           strip_components: 2
 
       - name: SSH and restart Nginx (optional, if needed)
