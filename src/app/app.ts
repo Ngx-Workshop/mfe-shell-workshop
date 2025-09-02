@@ -13,7 +13,7 @@ import { StructuralMfeComponent } from './components/structural-mfe';
 import { MfeRegistryService } from './services/mfe-registry.service';
 
 @Component({
-  selector: 'ngx-root',
+  selector: 'ngx-workshop-shell',
   imports: [
     RouterOutlet,
     MatButtonModule,

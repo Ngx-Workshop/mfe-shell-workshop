@@ -47,7 +47,7 @@ export class MfeRegistryService {
   private getRemoteUrlBySubType(subType: StructuralSubType) {
     return this.remotes$.pipe(
       map((remotes) =>
-        this.getUpdatedRemotesFromLocalStorage(remotes)
+        this.mergeOverrideRemotesURLsFromLocalStorage(remotes)
       ),
       map(
         (remotes) =>
@@ -58,7 +58,7 @@ export class MfeRegistryService {
     );
   }
 
-  private getUpdatedRemotesFromLocalStorage(
+  private mergeOverrideRemotesURLsFromLocalStorage(
     remotes: MfeRemoteDto[]
   ): MfeRemoteDto[] {
     const updatedRemotes = remotes.map((remote) => {
@@ -89,7 +89,9 @@ export class MfeRegistryService {
    * Path = slug(name), remoteEntry = remoteEntryUrl
    */
   buildUserJourneyRoutes(): Routes {
-    return this.getUpdatedRemotesFromLocalStorage(this.remotes.value)
+    return this.mergeOverrideRemotesURLsFromLocalStorage(
+      this.remotes.value
+    )
       .filter((r) => r.type === 'user-journey')
       .map((r) => ({
         path: toSlug(r.name),
