@@ -1,4 +1,7 @@
-import { provideHttpClient } from '@angular/common/http';
+import {
+  provideHttpClient,
+  withInterceptorsFromDi,
+} from '@angular/common/http';
 import {
   ApplicationConfig,
   importProvidersFrom,
@@ -37,7 +40,7 @@ export const appConfig: ApplicationConfig = {
       inject(ThemePickerService);
     }),
     importProvidersFrom(MatDialogModule, MatSnackBarModule),
-    provideHttpClient(),
+    provideHttpClient(withInterceptorsFromDi()),
     provideBrowserGlobalErrorListeners(),
     provideZonelessChangeDetection(),
     provideRouter(routes),
