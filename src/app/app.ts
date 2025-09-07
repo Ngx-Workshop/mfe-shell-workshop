@@ -91,6 +91,9 @@ import { MfeRegistryService } from './services/mfe-registry.service';
           'header'
           'main'
           'footer';
+        .nav {
+          display: none;
+        }
       }
     `,
   ],
