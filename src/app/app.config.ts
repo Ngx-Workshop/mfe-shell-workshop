@@ -1,11 +1,14 @@
 import { provideHttpClient } from '@angular/common/http';
 import {
   ApplicationConfig,
+  importProvidersFrom,
   inject,
   provideAppInitializer,
   provideBrowserGlobalErrorListeners,
   provideZonelessChangeDetection,
 } from '@angular/core';
+import { MatDialogModule } from '@angular/material/dialog';
+import { MatSnackBarModule } from '@angular/material/snack-bar';
 import { provideAnimationsAsync } from '@angular/platform-browser/animations/async';
 import { provideRouter, Router } from '@angular/router';
 import { ThemePickerService } from '@tmdjr/ngx-theme-picker';
@@ -33,9 +36,7 @@ export const appConfig: ApplicationConfig = {
     provideAppInitializer(() => {
       inject(ThemePickerService);
     }),
-    // provideAppInitializer(() =>
-    //   registerIcons(inject(MatIconRegistry), inject(DomSanitizer))()
-    // ),
+    importProvidersFrom(MatDialogModule, MatSnackBarModule),
     provideHttpClient(),
     provideBrowserGlobalErrorListeners(),
     provideZonelessChangeDetection(),
