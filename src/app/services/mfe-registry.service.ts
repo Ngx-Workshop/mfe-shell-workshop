@@ -89,6 +89,7 @@ export class MfeRegistryService {
    * Path = slug(name), remoteEntry = remoteEntryUrl
    */
   buildUserJourneyRoutes(): Routes {
+    const test = true;
     return this.mergeOverrideRemotesURLsFromLocalStorage(
       this.remotes.value
     )
@@ -96,20 +97,23 @@ export class MfeRegistryService {
       .map((r) => ({
         path: toSlug(r.name),
         data: { structuralOverrides: r.structuralOverrides },
-        loadComponent: () =>
-          loadRemoteModule({
-            type: 'module',
-            remoteEntry: r.remoteEntryUrl,
-            exposedModule: './Component',
-          }).then((m) => m.App),
+        loadComponent: !r.useRoutes
+          ? () =>
+              loadRemoteModule({
+                type: 'module',
+                remoteEntry: r.remoteEntryUrl,
+                exposedModule: './Component',
+              }).then((m) => m.App)
+          : undefined,
+        loadChildren: r.useRoutes
+          ? () =>
+              loadRemoteModule({
+                type: 'module',
+                remoteEntry: r.remoteEntryUrl,
+                exposedModule: './Routes',
+              }).then((m) => m.Routes)
+          : undefined,
       }));
-    // loadChildren: () =>
-    //   loadRemoteModule({
-    //     type: 'module',
-    //     remoteEntry: r.remoteEntryUrl,
-    //     exposedModule: './Routes',
-    //   }).then((m) => m.Routes),
-    // }));
   }
 
   /**
