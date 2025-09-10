@@ -89,7 +89,11 @@ export class MfeRegistryService {
    * Path = slug(name), remoteEntry = remoteEntryUrl
    */
   buildUserJourneyRoutes(): Routes {
-    const test = true;
+    console.log(
+      '%c[MFE REGISTRY] Building user-journey routes from remotes:',
+      'color: blue; font-weight: bold;',
+      this.remotes.value
+    );
     return this.mergeOverrideRemotesURLsFromLocalStorage(
       this.remotes.value
     )
