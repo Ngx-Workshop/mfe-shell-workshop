@@ -96,13 +96,20 @@ export class MfeRegistryService {
       .map((r) => ({
         path: toSlug(r.name),
         data: { structuralOverrides: r.structuralOverrides },
-        loadChildren: () =>
+        loadComponent: () =>
           loadRemoteModule({
             type: 'module',
             remoteEntry: r.remoteEntryUrl,
-            exposedModule: './Routes',
-          }).then((m) => m.DASHBOARD_ROUTES),
+            exposedModule: './Component',
+          }).then((m) => m.App),
       }));
+    // loadChildren: () =>
+    //   loadRemoteModule({
+    //     type: 'module',
+    //     remoteEntry: r.remoteEntryUrl,
+    //     exposedModule: './Routes',
+    //   }).then((m) => m.Routes),
+    // }));
   }
 
   /**
