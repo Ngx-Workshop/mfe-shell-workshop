@@ -100,7 +100,7 @@ export class MfeRegistryService {
           loadRemoteModule({
             type: 'module',
             remoteEntry: r.remoteEntryUrl,
-            exposedModule: './Component',
+            exposedModule: './Routes',
           }).then((m) => m.App),
       }));
   }
