@@ -101,7 +101,7 @@ export class MfeRegistryService {
             type: 'module',
             remoteEntry: r.remoteEntryUrl,
             exposedModule: './Routes',
-          }).then((m) => m.App),
+          }).then((m) => m.DASHBOARD_ROUTES),
       }));
   }
 
