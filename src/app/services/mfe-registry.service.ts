@@ -96,7 +96,7 @@ export class MfeRegistryService {
       .map((r) => ({
         path: toSlug(r.name),
         data: { structuralOverrides: r.structuralOverrides },
-        loadComponent: () =>
+        loadChildren: () =>
           loadRemoteModule({
             type: 'module',
             remoteEntry: r.remoteEntryUrl,
