@@ -105,6 +105,10 @@ export class MfeRegistryService {
         canActivate: r.requiresAuth
           ? [() => userAuthenticatedGuard]
           : [],
+
+        canActivateChild: r.requiresAuth
+          ? [() => userAuthenticatedGuard]
+          : [],
         // Load either component or routes based on `useRoutes` flag
         loadComponent: !r.useRoutes
           ? () =>
