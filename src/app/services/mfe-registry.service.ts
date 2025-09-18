@@ -2,6 +2,7 @@ import { loadRemoteModule } from '@angular-architects/module-federation';
 import { HttpClient } from '@angular/common/http';
 import { inject, Injectable } from '@angular/core';
 import { Router, Routes } from '@angular/router';
+import { userAuthenticatedGuard } from '@tmdjr/ngx-user-metadata';
 import { BehaviorSubject, map, tap } from 'rxjs';
 
 import type {
@@ -101,6 +102,10 @@ export class MfeRegistryService {
       .map((r) => ({
         path: toSlug(r.name),
         data: { structuralOverrides: r.structuralOverrides },
+        canActivate: r.requiresAuth
+          ? [() => userAuthenticatedGuard]
+          : [],
+        // Load either component or routes based on `useRoutes` flag
         loadComponent: !r.useRoutes
           ? () =>
               loadRemoteModule({
