@@ -1,5 +1,6 @@
 import {
   provideHttpClient,
+  withInterceptors,
   withInterceptorsFromDi,
 } from '@angular/common/http';
 import {
@@ -12,6 +13,7 @@ import {
 import { provideAnimationsAsync } from '@angular/platform-browser/animations/async';
 import { provideRouter, Router } from '@angular/router';
 import { ThemePickerService } from '@tmdjr/ngx-theme-picker';
+import { authInterceptor } from '@tmdjr/ngx-user-metadata';
 import { firstValueFrom, tap } from 'rxjs';
 import { routes } from './app.routes';
 import { MfeRegistryService } from './services/mfe-registry.service';
@@ -36,7 +38,10 @@ export const appConfig: ApplicationConfig = {
     provideAppInitializer(() => {
       inject(ThemePickerService);
     }),
-    provideHttpClient(withInterceptorsFromDi()),
+    provideHttpClient(
+      withInterceptorsFromDi(),
+      withInterceptors([authInterceptor])
+    ),
     provideBrowserGlobalErrorListeners(),
     provideZonelessChangeDetection(),
     provideRouter(routes),
