@@ -2,6 +2,7 @@ import { loadRemoteModule } from '@angular-architects/module-federation';
 import { HttpClient } from '@angular/common/http';
 import { inject, Injectable } from '@angular/core';
 import { Router, Routes } from '@angular/router';
+import { NgxNavigationalListService } from '@tmdjr/ngx-navigational-list';
 import { userAuthenticatedGuard } from '@tmdjr/ngx-user-metadata';
 import { BehaviorSubject, map, tap } from 'rxjs';
 
@@ -18,6 +19,7 @@ export function toSlug(value: string): string {
 @Injectable({ providedIn: 'root' })
 export class MfeRegistryService {
   http = inject(HttpClient);
+  ngxNavigationalListService = inject(NgxNavigationalListService);
 
   remotes = new BehaviorSubject<MfeRemoteDto[]>([]);
   remotes$ = this.remotes.asObservable();
@@ -134,6 +136,11 @@ export class MfeRegistryService {
   ): void {
     const dynamic = this.buildUserJourneyRoutes();
     router.resetConfig([...staticRoutes, ...dynamic]);
+
+    // NgxNavigationalListService
+    this.ngxNavigationalListService.userJourneyRemotes.next(
+      this.remotes.value.filter((r) => r.type === 'user-journey')
+    );
 
     console.log(
       '%c[MFE REGISTRY] Registered dynamic routes:',
