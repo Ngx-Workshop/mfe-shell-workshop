@@ -137,11 +137,6 @@ export class MfeRegistryService {
     const dynamic = this.buildUserJourneyRoutes();
     router.resetConfig([...staticRoutes, ...dynamic]);
 
-    // NgxNavigationalListService
-    this.ngxNavigationalListService.userJourneyRemotes.next(
-      this.remotes.value.filter((r) => r.type === 'user-journey')
-    );
-
     console.log(
       '%c[MFE REGISTRY] Registered dynamic routes:',
       'color: green; font-weight: bold;',

@@ -14,21 +14,29 @@ import { provideAnimationsAsync } from '@angular/platform-browser/animations/asy
 import { provideRouter, Router } from '@angular/router';
 import { ThemePickerService } from '@tmdjr/ngx-theme-picker';
 import { authInterceptor } from '@tmdjr/ngx-user-metadata';
-import { firstValueFrom, tap } from 'rxjs';
+import { firstValueFrom, forkJoin, tap } from 'rxjs';
 import { routes } from './app.routes';
 import { MfeRegistryService } from './services/mfe-registry.service';
+import { NavigationalListService } from './services/navigational-list.service';
 
 function initializerFn() {
   const mfeRegistryService = inject(MfeRegistryService);
+  const navigationalListService = inject(NavigationalListService);
   const router = inject(Router);
   return firstValueFrom(
-    mfeRegistryService
-      .loadMfeRemotes()
-      .pipe(
-        tap(() =>
-          mfeRegistryService.registerUserJourneyRoutes(router, routes)
-        )
-      )
+    forkJoin([
+      navigationalListService.getMenuHierarchy$('WORKSHOP'),
+      mfeRegistryService
+        .loadMfeRemotes()
+        .pipe(
+          tap(() =>
+            mfeRegistryService.registerUserJourneyRoutes(
+              router,
+              routes
+            )
+          )
+        ),
+    ])
   );
 }
 
