@@ -38,6 +38,7 @@ import { MfeRegistryService } from './services/mfe-registry.service';
           [mode]="vm.modes.header ?? 'disabled'"
           [role]="vm.role ?? 'none'"
         ></ngx-structural-mfe>
+        {{ vm.modes.header }}
       </header>
 
       <main>
