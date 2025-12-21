@@ -3,7 +3,6 @@ import { HttpClient } from '@angular/common/http';
 import { inject, Injectable } from '@angular/core';
 import { Router, Routes } from '@angular/router';
 import { NgxNavigationalListService } from '@tmdjr/ngx-navigational-list';
-import { userAuthenticatedGuard } from '@tmdjr/ngx-user-metadata';
 import { BehaviorSubject, map, tap } from 'rxjs';
 
 import type {
@@ -95,7 +94,7 @@ export class MfeRegistryService {
   buildUserJourneyRoutes(): Routes {
     console.log(
       '%c[MFE REGISTRY] Building user-journey routes from remotes:',
-      'color: blue; font-weight: bold;',
+      'color: salmon; font-weight: bold;',
       this.remotes.value
     );
     return this.mergeOverrideRemotesURLsFromLocalStorage(
@@ -105,7 +104,7 @@ export class MfeRegistryService {
       .map((r) => ({
         path: toSlug(r.name),
         data: { structuralOverrides: r.structuralOverrides },
-        canActivate: r.requiresAuth ? [userAuthenticatedGuard] : [],
+        // canActivate: r.requiresAuth ? [userAuthenticatedGuard] : [],
         // Load either component or routes based on `useRoutes` flag
         loadComponent: !r.useRoutes
           ? () =>
