@@ -3,39 +3,55 @@ import {
   Component,
   ComponentRef,
   inject,
+  Input,
   input,
   OnInit,
   ViewContainerRef,
 } from '@angular/core';
-import {
-  takeUntilDestroyed,
-  toObservable,
-} from '@angular/core/rxjs-interop';
+import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 
 import {
   StructuralNavOverrideMode,
   StructuralOverrideMode,
 } from '@tmdjr/ngx-mfe-orchestrator-contracts';
+import { Role } from '@tmdjr/ngx-navigational-list';
+import { BehaviorSubject, combineLatest } from 'rxjs';
+
+type StructuralMfeInputModes =
+  | StructuralOverrideMode
+  | StructuralNavOverrideMode;
+
 @Component({
   selector: 'ngx-structural-mfe',
   template: ``,
 })
 export class StructuralMfeComponent implements OnInit {
   protected viewContainer = inject(ViewContainerRef);
+  protected cmpRef?: ComponentRef<any>;
+
   mfeRemoteUrl = input.required<string>();
-  mode = input.required<
-    StructuralOverrideMode | StructuralNavOverrideMode
-  >();
-  mode$ = toObservable(this.mode);
-  private cmpRef?: ComponentRef<any>;
+
+  @Input()
+  set role(value: Role) {
+    this.role$.next(value);
+  }
+  role$ = new BehaviorSubject<Role>('none');
+
+  @Input()
+  set mode(value: StructuralMfeInputModes) {
+    this.mode$.next(value);
+  }
+  mode$ = new BehaviorSubject<StructuralMfeInputModes>('disabled');
 
   constructor() {
-    this.mode$.pipe(takeUntilDestroyed()).subscribe((mode) => {
-      console.log('[MFE MODE]', mode, this.cmpRef);
-      if (this.cmpRef) {
-        this.cmpRef.setInput?.('mode', mode);
-      }
-    });
+    combineLatest([this.mode$, this.role$])
+      .pipe(takeUntilDestroyed())
+      .subscribe(([mode, role]) => {
+        if (this.cmpRef) {
+          this.cmpRef.setInput('mode', mode);
+          this.cmpRef.setInput('role', role);
+        }
+      });
   }
 
   async ngOnInit() {
@@ -48,7 +64,7 @@ export class StructuralMfeComponent implements OnInit {
       this.cmpRef = this.viewContainer.createComponent(
         remoteComponent.default
       );
-      this.cmpRef.setInput?.('mode', this.mode());
+      this.cmpRef.setInput('mode', this.mode$.value);
     } catch (error) {
       console.error('[MFE LOAD ERROR]', error);
     }
