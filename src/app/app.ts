@@ -8,7 +8,8 @@ import {
   Router,
   RouterOutlet,
 } from '@angular/router';
-import { combineLatest, filter } from 'rxjs';
+import { NgxUserMetadataService } from '@tmdjr/ngx-user-metadata';
+import { combineLatest, filter, map } from 'rxjs';
 import { StructuralMfeComponent } from './components/structural-mfe';
 import { MfeRegistryService } from './services/mfe-registry.service';
 
@@ -35,6 +36,7 @@ import { MfeRegistryService } from './services/mfe-registry.service';
         <ngx-structural-mfe
           [mfeRemoteUrl]="vm.headerMfeRemoteUrl ?? ''"
           [mode]="vm.modes.header ?? 'disabled'"
+          [role]="vm.role ?? 'none'"
         ></ngx-structural-mfe>
       </header>
 
@@ -99,6 +101,7 @@ import { MfeRegistryService } from './services/mfe-registry.service';
   ],
 })
 export class App {
+  private metadata = inject(NgxUserMetadataService);
   private registry = inject(MfeRegistryService);
   private router = inject(Router);
   private route = inject(ActivatedRoute);
@@ -110,6 +113,7 @@ export class App {
     footerMfeRemoteUrl: this.registry.footerRemoteUrl$,
     navigationMfeRemoteUrl: this.registry.navigationRemoteUrl$,
     modes: this.registry.structuralModes$,
+    role: this.metadata.userMetadata$.pipe(map((m) => m?.role)),
   });
 
   constructor() {
