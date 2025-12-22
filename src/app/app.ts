@@ -29,6 +29,7 @@ import { MfeRegistryService } from './services/mfe-registry.service';
           class="nav-mfe"
           [mfeRemoteUrl]="vm.navigationMfeRemoteUrl ?? ''"
           [mode]="vm.modes.nav ?? 'disabled'"
+          [role]="vm.role ?? 'none'"
         ></ngx-structural-mfe>
       </aside>
 
@@ -48,6 +49,7 @@ import { MfeRegistryService } from './services/mfe-registry.service';
         <ngx-structural-mfe
           [mfeRemoteUrl]="vm.footerMfeRemoteUrl ?? ''"
           [mode]="vm.modes.footer ?? 'disabled'"
+          [role]="vm.role ?? 'none'"
         ></ngx-structural-mfe>
       </footer>
     </div>
