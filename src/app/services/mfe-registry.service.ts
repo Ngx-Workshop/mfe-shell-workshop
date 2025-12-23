@@ -10,7 +10,10 @@ import type {
   StructuralOverridesDto,
   StructuralSubType,
 } from '@tmdjr/ngx-mfe-orchestrator-contracts';
-import { userAuthenticatedGuard } from '@tmdjr/ngx-user-metadata';
+import {
+  checkUserAuthenticatedGuard,
+  userAuthenticatedGuard,
+} from '@tmdjr/ngx-user-metadata';
 
 export function toSlug(value: string): string {
   return value.trim().toLowerCase().replace(/\s+/g, '-');
@@ -105,7 +108,9 @@ export class MfeRegistryService {
       .map((r) => ({
         path: toSlug(r.name),
         data: { structuralOverrides: r.structuralOverrides },
-        canActivate: r.requiresAuth ? [userAuthenticatedGuard] : [],
+        canActivate: r.requiresAuth
+          ? [userAuthenticatedGuard]
+          : [checkUserAuthenticatedGuard],
         // Load either component or routes based on `useRoutes` flag
         loadComponent: !r.useRoutes
           ? () =>
