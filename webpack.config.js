@@ -14,6 +14,11 @@ module.exports = withModuleFederationPlugin({
       strictVersion: true,
       requiredVersion: '21.1.0',
     },
+    '@angular/core/rxjs-interop': {
+      singleton: true,
+      strictVersion: true,
+      requiredVersion: '21.1.0',
+    },
     '@angular/common': {
       singleton: true,
       strictVersion: true,
@@ -82,7 +87,7 @@ module.exports = withModuleFederationPlugin({
     '@tmdjr/ngx-navigational-list': {
       singleton: true,
       strictVersion: true,
-      requiredVersion: '21.0.6',
+      requiredVersion: '21.0.8',
     },
 
     '@tmdjr/ngx-editor-js2': {
