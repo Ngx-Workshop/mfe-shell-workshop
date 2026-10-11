@@ -10,6 +10,7 @@ import {
   provideBrowserGlobalErrorListeners,
   provideZonelessChangeDetection,
 } from '@angular/core';
+import { MatIconRegistry } from '@angular/material/icon';
 import { provideAnimationsAsync } from '@angular/platform-browser/animations/async';
 import {
   provideRouter,
@@ -57,6 +58,12 @@ export const appConfig: ApplicationConfig = {
     provideAppInitializer(initializerFn),
     provideAppInitializer(() => {
       inject(ThemePickerService);
+    }),
+    provideAppInitializer(() => {
+      inject(MatIconRegistry).setDefaultFontSetClass(
+        'material-symbols-outlined',
+        'mat-ligature-font'
+      );
     }),
     provideHttpClient(
       withInterceptorsFromDi(),
