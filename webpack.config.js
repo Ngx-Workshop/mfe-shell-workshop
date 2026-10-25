@@ -79,7 +79,13 @@ module.exports = withModuleFederationPlugin({
     '@tmdjr/ngx-user-metadata': {
       singleton: true,
       strictVersion: true,
-      requiredVersion: '21.0.6',
+      requiredVersion: '21.0.7',
+    },
+
+    '@tmdjr/ngx-workshop-logger': {
+      singleton: true,
+      strictVersion: true,
+      requiredVersion: '0.4.0',
     },
 
     '@tmdjr/ngx-local-storage-client': {
