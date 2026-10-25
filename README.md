@@ -1,5 +1,14 @@
 # NgxWorkshopShell
 
+## Build toolchain compatibility
+
+Keep `@angular-devkit/build-angular` pinned to `21.2.26` and the npm webpack
+override at `5.105.2`. Builder `21.2.28` uses webpack `5.112.0`, whose federation
+identifiers break `license-webpack-plugin@4.0.2` with an undefined `trim` error.
+Both pins keep one compatible webpack runtime. Keep license extraction enabled;
+validate a normal production build and non-empty `3rdpartylicenses.txt` before
+removing these pins after an upstream fix.
+
 This project was generated using [Angular CLI](https://github.com/angular/angular-cli) version 20.0.3.
 
 ## Development server
