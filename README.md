@@ -68,3 +68,9 @@ Angular CLI does not come with an end-to-end testing framework by default. You c
 ## Additional Resources
 
 For more information on using the Angular CLI, including detailed command references, visit the [Angular CLI Overview and Command Reference](https://angular.dev/tools/cli) page.
+
+## Structural design-system integration
+
+Structural remotes opt into `.ngx-design-system`; their Material menus use `.ngx-design-system-overlay`. The shell supplies Ngx semantic tokens, button styles and the scoped Material adapter, including portaled overlays. Package version 21.0.2 includes the shaped button hover fix. Existing journey palettes remain body-scoped.
+
+The structural mode determines desktop rail allocation: full 176px, relaxed 136px, compact 88px. At 720px and below, the grid places the navigation above the header and content, with no reserved side column. Mobile resizing does not change the active mode or menu data. Disabled navigation removes its grid allocation. Dynamic loading passes both the current role and mode before the first remote render.

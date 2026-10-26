@@ -64,6 +64,7 @@ export class StructuralMfeComponent implements OnInit {
       this.cmpRef = this.viewContainer.createComponent(
         remoteComponent.default
       );
+      this.cmpRef.setInput('role', this.role$.value);
       this.cmpRef.setInput('mode', this.mode$.value);
     } catch (error) {
       console.error('[MFE LOAD ERROR]', error);
