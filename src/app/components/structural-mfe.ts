@@ -10,16 +10,11 @@ import {
 } from '@angular/core';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 
-import {
-  StructuralNavOverrideMode,
-  StructuralOverrideMode,
-} from '@tmdjr/ngx-mfe-orchestrator-contracts';
+import type { StructuralOverrideMode } from '@tmdjr/ngx-mfe-orchestrator-contracts';
 import { Role } from '@tmdjr/ngx-navigational-list';
 import { BehaviorSubject, combineLatest } from 'rxjs';
 
-type StructuralMfeInputModes =
-  | StructuralOverrideMode
-  | StructuralNavOverrideMode;
+type StructuralMfeInputModes = StructuralOverrideMode;
 
 @Component({
   selector: 'ngx-structural-mfe',
